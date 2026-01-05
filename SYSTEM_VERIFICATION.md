@@ -7,7 +7,7 @@ The login issue has been fixed. The problem was that test accounts hadn't been c
 
 ### 1. Test Accounts Created
 - Created citizen account: citizen@bringhome.ai
-- Created admin account: admin@bringhome.ai
+- Created admin account: admin@gmail.com
 - Both accounts have verified passwords and profiles
 
 ### 2. Missing RLS Policies Added
@@ -49,8 +49,8 @@ Password: citizen@bringhome.ai
 
 ### Admin Login
 ```
-Email: admin@bringhome.ai
-Password: admin@bringhome.ai
+Email: admin@gmail.com
+Password: admin@gmail.com
 ```
 
 ## System Capabilities Verified
