@@ -6,7 +6,7 @@ The login issue has been fixed. The problem was that test accounts hadn't been c
 ## What Was Fixed
 
 ### 1. Test Accounts Created
-- Created citizen account: citizen@bringhome.ai
+- Created citizen account: citizen@gmail.com
 - Created admin account: admin@gmail.com
 - Both accounts have verified passwords and profiles
 
@@ -43,8 +43,8 @@ The login issue has been fixed. The problem was that test accounts hadn't been c
 
 ### Citizen Login
 ```
-Email: citizen@bringhome.ai
-Password: citizen@bringhome.ai
+Email: citizen@gmail.com
+Password: citizen@gmail.com
 ```
 
 ### Admin Login
