@@ -6,8 +6,8 @@ The login issue has been fixed. The problem was that test accounts hadn't been c
 ## What Was Fixed
 
 ### 1. Test Accounts Created
-- Created citizen account: citizen@reunite.ai
-- Created admin account: admin@reunite.ai
+- Created citizen account: citizen@bringhome.ai
+- Created admin account: admin@bringhome.ai
 - Both accounts have verified passwords and profiles
 
 ### 2. Missing RLS Policies Added
@@ -43,14 +43,14 @@ The login issue has been fixed. The problem was that test accounts hadn't been c
 
 ### Citizen Login
 ```
-Email: citizen@reunite.ai
-Password: citizen@reunite.ai
+Email: citizen@bringhome.ai
+Password: citizen@bringhome.ai
 ```
 
 ### Admin Login
 ```
-Email: admin@reunite.ai
-Password: admin@reunite.ai
+Email: admin@bringhome.ai
+Password: admin@bringhome.ai
 ```
 
 ## System Capabilities Verified
