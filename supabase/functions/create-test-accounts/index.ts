@@ -24,14 +24,14 @@ Deno.serve(async (req: Request) => {
 
     const testAccounts = [
       {
-        email: "citizen@reunite.ai",
-        password: "citizen@reunite.ai",
+        email: "citizen@bringhome.ai",
+        password: "citizen@bringhome.ai",
         role: "user",
         full_name: "John Citizen",
       },
       {
-        email: "admin@reunite.ai",
-        password: "admin@reunite.ai",
+        email: "admin@bringhome.ai",
+        password: "admin@bringhome.ai",
         role: "admin",
         full_name: "Admin Officer",
       },
