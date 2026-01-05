@@ -3,8 +3,8 @@
 ## Test Accounts Created Successfully
 
 ### Citizen Account
-- **Email:** citizen@bringhome.ai
-- **Password:** citizen@bringhome.ai
+- **Email:** citizen@gmail.com
+- **Password:** citizen@gmail.com
 - **Role:** user
 - **Access:** Can report missing persons
 
