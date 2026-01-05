@@ -17,7 +17,9 @@ export function Header() {
         <div className="flex items-center justify-between h-20">
           <div className="flex items-center space-x-4">
             <div className="flex-shrink-0">
-              <img src="/image.png" alt="DDU College Logo" className="w-16 h-16 object-contain" />
+              <div className="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center">
+                <span className="text-white font-bold text-xs text-center">DDU<br/>College</span>
+              </div>
             </div>
             <div>
               <h1 className="text-xl font-bold text-slate-900">ReUnite AI</h1>
