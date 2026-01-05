@@ -9,8 +9,8 @@
 - **Access:** Can report missing persons
 
 ### Admin Account
-- **Email:** admin@bringhome.ai
-- **Password:** admin@bringhome.ai
+- **Email:** admin@gmail.com
+- **Password:** admin@gmail.com
 - **Role:** admin
 - **Access:** Can view dashboard, upload found person images, view matching results
 
