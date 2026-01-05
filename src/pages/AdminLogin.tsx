@@ -2,6 +2,8 @@ import { useState, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, Shield, AlertCircle } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import logo from '../assets/ddu-logo.png';
+
 
 export function AdminLogin() {
   const navigate = useNavigate();
@@ -58,8 +60,12 @@ export function AdminLogin() {
       <div className="bg-white shadow-md py-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-center space-x-4">
-            <div className="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center">
-              <span className="text-white font-bold text-xs text-center">DDU<br/>College</span>
+            <div className="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center bg-white">
+              <img
+                src={logo}
+                alt="DDU College logo"
+                className="w-full h-full object-cover"
+              />
             </div>
             <div className="text-center">
               <h1 className="text-2xl font-bold text-slate-900">Deen Dayal Upadhyaya College</h1>
