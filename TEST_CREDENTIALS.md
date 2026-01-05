@@ -3,14 +3,14 @@
 ## Test Accounts Created Successfully
 
 ### Citizen Account
-- **Email:** citizen@reunite.ai
-- **Password:** citizen@reunite.ai
+- **Email:** citizen@bringhome.ai
+- **Password:** citizen@bringhome.ai
 - **Role:** user
 - **Access:** Can report missing persons
 
 ### Admin Account
-- **Email:** admin@reunite.ai
-- **Password:** admin@reunite.ai
+- **Email:** admin@bringhome.ai
+- **Password:** admin@bringhome.ai
 - **Role:** admin
 - **Access:** Can view dashboard, upload found person images, view matching results
 
