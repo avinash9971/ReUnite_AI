@@ -78,7 +78,7 @@ export function UserLogin() {
       <div
         className="flex-1 flex items-center justify-center px-4 py-12"
         style={{
-          backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg?auto=compress&cs=tinysrgb&w=1920)',
+          backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-XUELrZHJHVM2IcTnliOZv3Z4bsUSLedgfQ&s)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
@@ -166,7 +166,7 @@ export function UserLogin() {
 
           <div className="mt-6 text-center">
             <p className="text-sm text-white bg-black bg-opacity-50 px-4 py-2 rounded-lg inline-block">
-              ReUnite AI - Missing Person Identification System
+              BringHome AI - Missing Person Identification System
             </p>
           </div>
         </div>
