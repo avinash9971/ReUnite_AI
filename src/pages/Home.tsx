@@ -28,7 +28,7 @@ export function Home() {
       <div
         className="flex-1 flex items-center justify-center px-4 py-12"
         style={{
-          backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://images.pexels.com/photos/2774556/pexels-photo-2774556.jpeg?auto=compress&cs=tinysrgb&w=1920)',
+          backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(https://t4.ftcdn.net/jpg/08/29/92/35/360_F_829923583_Q9qvQUSqXo0URtHNzwwFqU0H0ByKXz1Y.jpg)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
@@ -36,14 +36,14 @@ export function Home() {
         <div className="max-w-6xl w-full">
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              ReUnite AI
+              BringHome AI
             </h2>
             <p className="text-xl text-slate-200 mb-2">
               Missing Person Identification System
             </p>
             <p className="text-slate-300 max-w-2xl mx-auto">
               A research-based government system to help reunite missing persons with their families
-              using advanced identification technology
+              which is an integrated approach using CNN and GAN.
             </p>
           </div>
 
