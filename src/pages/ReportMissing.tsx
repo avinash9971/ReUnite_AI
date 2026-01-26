@@ -14,6 +14,7 @@ import {
   Image as ImageIcon,
   Loader,
 } from 'lucide-react';
+import ImageTypeSelector from '../components/ImageTypeSelector';
 
 interface FormData {
   full_name: string;
@@ -43,6 +44,7 @@ export function ReportMissing() {
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>('');
+  const [imageType, setImageType] = useState<string>('');
   const [errors, setErrors] = useState<FormErrors>({});
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -132,6 +134,10 @@ export function ReportMissing() {
       newErrors.image = 'Photo is required';
     }
 
+    if (imageFile && !imageType) {
+      newErrors.image_type = 'Image type is required';
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -197,6 +203,7 @@ export function ReportMissing() {
         image_year: parseInt(formData.image_year),
         missing_from: formData.missing_from.trim(),
         status: 'active',
+        image_type: imageType,
       });
 
       if (error) throw error;
@@ -213,6 +220,7 @@ export function ReportMissing() {
       });
       setImageFile(null);
       setImagePreview('');
+      setImageType('');
 
       setTimeout(() => {
         navigate('/report-missing');
@@ -452,10 +460,23 @@ export function ReportMissing() {
                           onClick={() => {
                             setImageFile(null);
                             setImagePreview('');
+                            setImageType('');
                           }}
                           className="text-sm text-blue-600 hover:text-blue-700 font-medium"
                         >
                           Change Photo
+                        </button>
+                        <br />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setImageFile(null);
+                            setImagePreview('');
+                            setImageType('');
+                          }}
+                          className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                        >
+                          Add Photo
                         </button>
                       </div>
                     ) : (
@@ -482,6 +503,17 @@ export function ReportMissing() {
                     )}
                   </div>
                   {errors.image && <p className="mt-1 text-sm text-red-600">{errors.image}</p>}
+
+                  {imageFile && (
+                    <ImageTypeSelector
+                      value={imageType}
+                      onChange={(v) => {
+                        setImageType(v);
+                        if (errors.image_type) setErrors((prev) => ({ ...prev, image_type: '' }));
+                      }}
+                      error={errors.image_type}
+                    />
+                  )}
                 </div>
               </div>
 
