@@ -17,7 +17,7 @@ export function Footer() {
 
           <div className="text-center md:text-right">
             <p className="text-sm text-slate-300">
-              ReUnite AI - Missing Person Identification System
+              BringHome AI - Missing Person Identification System
             </p>
             <p className="text-xs text-slate-400 mt-1">
               &copy; {currentYear} All rights reserved
