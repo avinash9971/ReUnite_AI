@@ -137,7 +137,7 @@ export function AdminDashboard() {
               <div className="text-white mb-4 md:mb-0">
                 <h2 className="text-2xl font-bold mb-2">Upload Found Person</h2>
                 <p className="text-slate-200">
-                  Use AI-powered facial recognition to match found persons with missing person reports
+                  An Integrated Approach Using CNN and GAN For Missing Person Identification
                 </p>
               </div>
               <button
