@@ -1,4 +1,4 @@
-import { useState, FormEvent, ChangeEvent } from 'react';
+import { useState, FormEvent, ChangeEvent, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Layout } from '../components/Layout';
 import { useAuth } from '../contexts/AuthContext';
@@ -10,50 +10,61 @@ import {
   Loader,
   Search,
 } from 'lucide-react';
+import ImageTypeSelector from '../components/ImageTypeSelector';
 
 export function UploadFoundPerson() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string>('');
+
+  type ImageEntry = {
+    file: File;
+    preview: string;
+    type: string; // 'sketch' | 'younger' | 'blurry' | ''
+  };
+
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [images, setImages] = useState<ImageEntry[]>([]);
+  const [showImageTypeErrors, setShowImageTypeErrors] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleAddImage = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      if (file.size > 5242880) {
-        setError('Image must be less than 5MB');
-        return;
-      }
+    if (!file) return;
 
-      const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
-      if (!validTypes.includes(file.type)) {
-        setError('Only JPEG, PNG, and WebP images are allowed');
-        return;
-      }
-
-      setImageFile(file);
-      setError('');
-
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+    if (file.size > 5242880) {
+      setError('Image must be less than 5MB');
+      return;
     }
+
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    if (!validTypes.includes(file.type)) {
+      setError('Only JPEG, PNG, and WebP images are allowed');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImages((prev) => [...prev, { file, preview: reader.result as string, type: '' }]);
+    };
+    reader.readAsDataURL(file);
+
+    setError('');
+
+    // allow selecting the same file again if needed
+    if (e.target) e.target.value = '';
   };
 
-  const uploadImage = async (): Promise<string | null> => {
-    if (!imageFile || !user) return null;
+  const uploadSingleImage = async (file: File): Promise<string | null> => {
+    if (!file || !user) return null;
 
     try {
-      const fileExt = imageFile.name.split('.').pop();
-      const fileName = `${user.id}/${Date.now()}.${fileExt}`;
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${user.id}/${Date.now()}-${Math.random().toString(36).slice(2)}.${fileExt}`;
 
       const { data, error } = await supabase.storage
         .from('found-persons-images')
-        .upload(fileName, imageFile, {
+        .upload(fileName, file, {
           cacheControl: '3600',
           upsert: false,
         });
@@ -71,12 +82,28 @@ export function UploadFoundPerson() {
     }
   };
 
+  const removeImage = (index: number) => {
+    setImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const updateImageType = (index: number, type: string) => {
+    setImages((prev) => prev.map((img, i) => (i === index ? { ...img, type } : img)));
+    setShowImageTypeErrors(false);
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError('');
+    setShowImageTypeErrors(false);
 
-    if (!imageFile) {
-      setError('Please select an image to upload');
+    if (images.length === 0) {
+      setError('Please add at least one image to upload');
+      return;
+    }
+
+    if (images.some((img) => !img.type)) {
+      setShowImageTypeErrors(true);
+      setError('Please select image type for all photos');
       return;
     }
 
@@ -88,17 +115,21 @@ export function UploadFoundPerson() {
     setLoading(true);
 
     try {
-      const imageUrl = await uploadImage();
+      const uploaded = await Promise.all(images.map((img) => uploadSingleImage(img.file)));
 
-      if (!imageUrl) {
+      if (uploaded.some((u) => !u)) {
         throw new Error('Failed to upload image');
       }
+
+      const imagesPayload = images.map((img, i) => ({ url: uploaded[i] as string, type: img.type }));
 
       const { data: foundPerson, error: insertError } = await supabase
         .from('found_persons')
         .insert({
           admin_id: user.id,
-          image_url: imageUrl,
+          image_url: imagesPayload[0].url,
+          image_type: imagesPayload[0].type,
+          images: imagesPayload,
         })
         .select()
         .single();
@@ -108,9 +139,7 @@ export function UploadFoundPerson() {
       navigate(`/matching-results/${foundPerson.id}`);
     } catch (error) {
       console.error('Submission error:', error);
-      setError(
-        error instanceof Error ? error.message : 'Failed to upload. Please try again.'
-      );
+      setError(error instanceof Error ? error.message : 'Failed to upload. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -145,47 +174,62 @@ export function UploadFoundPerson() {
                 <label className="block text-sm font-medium text-slate-700 mb-2">
                   Upload Photo of Found Person <span className="text-red-500">*</span>
                 </label>
-                <div className="border-2 border-dashed border-slate-300 rounded-lg p-8 text-center hover:border-slate-400 transition-colors">
-                  {imagePreview ? (
-                    <div className="space-y-4">
-                      <img
-                        src={imagePreview}
-                        alt="Preview"
-                        className="max-w-full h-96 object-contain mx-auto rounded-lg shadow-lg"
-                      />
+                <div className="border-2 border-dashed border-slate-300 rounded-lg p-6 hover:border-slate-400 transition-colors">
+                  <div className="flex items-center justify-between mb-4">
+                    <p className="text-sm text-slate-700">Add one or more photos. For each photo, select its type.</p>
+                    <div>
                       <button
                         type="button"
-                        onClick={() => {
-                          setImageFile(null);
-                          setImagePreview('');
-                        }}
-                        className="text-sm text-slate-600 hover:text-slate-700 font-medium"
+                        onClick={() => fileInputRef.current?.click()}
+                        className="px-4 py-2 bg-slate-700 hover:bg-slate-800 text-white font-medium rounded-lg transition-colors"
                       >
-                        Change Photo
+                        Add Photo
                       </button>
-                    </div>
-                  ) : (
-                    <div>
-                      <ImageIcon className="w-16 h-16 text-slate-400 mx-auto mb-4" />
-                      <label
-                        htmlFor="image"
-                        className="cursor-pointer inline-flex items-center space-x-2 px-6 py-3 bg-slate-700 hover:bg-slate-800 text-white font-medium rounded-lg transition-colors"
-                      >
-                        <Upload className="w-5 h-5" />
-                        <span>Select Image</span>
-                      </label>
                       <input
+                        ref={fileInputRef}
                         type="file"
-                        id="image"
                         accept="image/jpeg,image/jpg,image/png,image/webp"
-                        onChange={handleImageChange}
+                        onChange={handleAddImage}
                         className="hidden"
                       />
-                      <p className="text-sm text-slate-500 mt-4">
-                        JPEG, PNG, or WebP (Max 5MB)
-                      </p>
-                      <p className="text-xs text-slate-400 mt-2">
-                        For best results, use a clear, front-facing photo
+                    </div>
+                  </div>
+
+                  {images.length > 0 ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {images.map((img, idx) => (
+                        <div key={idx} className="border rounded-lg p-3">
+                          <img
+                            src={img.preview}
+                            alt={`photo-${idx}`}
+                            className="w-full h-56 object-contain rounded"
+                          />
+
+                          <div className="mt-3">
+                            <ImageTypeSelector
+                              value={img.type}
+                              onChange={(v) => updateImageType(idx, v)}
+                              error={showImageTypeErrors && !img.type ? 'Image type is required' : ''}
+                            />
+
+                            <div className="flex justify-between mt-2">
+                              <button
+                                type="button"
+                                onClick={() => removeImage(idx)}
+                                className="text-sm text-red-600"
+                              >
+                                Remove
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-8">
+                      <ImageIcon className="w-16 h-16 text-slate-400 mx-auto mb-4" />
+                      <p className="text-sm text-slate-500">
+                        No photos yet. Click <button type="button" onClick={() => fileInputRef.current?.click()} className="text-blue-600 underline">Add Photo</button> to upload.
                       </p>
                     </div>
                   )}
@@ -218,7 +262,7 @@ export function UploadFoundPerson() {
                 </button>
                 <button
                   type="submit"
-                  disabled={loading || !imageFile}
+                  disabled={loading || images.length === 0 || images.some((img) => !img.type)}
                   className="px-6 py-2.5 bg-slate-700 hover:bg-slate-800 text-white font-semibold rounded-lg transition-colors disabled:bg-slate-400 disabled:cursor-not-allowed flex items-center space-x-2"
                 >
                   {loading ? (
