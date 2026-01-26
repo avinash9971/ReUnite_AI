@@ -1,6 +1,8 @@
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { LogOut } from 'lucide-react';
+import logo from '../assets/ddu-logo.png';
+
 
 export function Header() {
   const { user, profile, signOut } = useAuth();
@@ -14,21 +16,25 @@ export function Header() {
   return (
     <header className="bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between py-4">
+          {/* left: logo + title */}
           <div className="flex items-center space-x-4">
-            <div className="flex-shrink-0">
-              <div className="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-xs text-center">DDU<br/>College</span>
-              </div>
+            <div className="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center bg-white">
+              <img
+                src={logo}
+                alt="DDU College logo"
+                className="w-full h-full object-cover"
+              />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-slate-900">ReUnite AI</h1>
+              <h1 className="text-xl font-bold text-slate-900">BringHome AI</h1>
               <p className="text-sm text-slate-600">Missing Person Identification System</p>
             </div>
           </div>
 
+          {/* right: user / sign out */}
           <div className="flex items-center space-x-4">
-            {user && profile && (
+            {user && profile ? (
               <>
                 <div className="text-right">
                   <p className="text-sm font-medium text-slate-900">{profile.full_name || profile.email}</p>
@@ -42,7 +48,7 @@ export function Header() {
                   <span>Sign Out</span>
                 </button>
               </>
-            )}
+            ) : null}
           </div>
         </div>
       </div>
