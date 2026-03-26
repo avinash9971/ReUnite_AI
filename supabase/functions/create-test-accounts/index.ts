@@ -25,13 +25,13 @@ Deno.serve(async (req: Request) => {
     const testAccounts = [
       {
         email: "citizen@gmail.com",
-        password: "citizen@gmail.com",
+        password: "citizen123",
         role: "user",
         full_name: "John Citizen",
       },
       {
         email: "admin@gmail.com",
-        password: "admin@gmail.com",
+        password: "admin123",
         role: "admin",
         full_name: "Admin Officer",
       },
